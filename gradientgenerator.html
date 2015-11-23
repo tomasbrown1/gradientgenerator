@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<style>
+
 			@font-face {
 				font-family: 'Work Sans';
 				font-style: normal;
@@ -11,6 +12,7 @@
 			}
 
 			body {
+				margin: 0px;
 				height: 100vh;
 				font-family: 'Work Sans', sans-serif;
 			}
@@ -29,26 +31,99 @@
 			textarea {
 				font-size: 125%;
 				resize: none;
+				margin-bottom: 20px;
+			}
+
+			#buttons div {
+				height: 50px;
+				width: 100px;
+				display: inline-block;
+				margin: auto auto;
+				border-radius: 10px;
+				margin: auto 50px;
+				cursor: pointer;
+				background-color: #FFFFFF;
+				-webkit-user-select: none;
+				transition: all .2s ease-in-out;
+			}
+
+			#refresh {
+				background-image: url('refresh.png');
+				background-repeat: no-repeat;
+				background-position: bottom;
+			}
+
+			#copy {
+				background-image: url('copy.png');
+				background-size: auto 27px;
+				background-repeat: no-repeat;
+				background-position: bottom;
+			}
+
+			#buttons div:hover {
+				transform: scale(1.1);
+				background-color: #08F905;
+			}
+
+			#success {
+				display: none;
+				top: 75vh;
+				left: calc(50% - 150px);
+				position: absolute;
+				height: 10px;
+				width: 350px;
+				text-align: center;
+				background-color: #FFF;
+				padding-bottom: 25px;
+				border-radius: 10px;
+			}
+
+			#success p {
+				margin: auto;
+				padding-top: 7px;
 			}
 		</style>
 	</head>
 	<body>
 
 		<div id="display">
-			<h1>Copy the HTML below to use this gradient:</h1>
-			<textarea readonly rows="1" cols="50">hello</textarea>
+			<h1>Copy the code below to use this gradient:</h1>
+			<textarea id="readout" readonly rows="1" cols="70"></textarea>
+			<div id="buttons">
+				<div id="refresh">Reroll</div>
+				<div id="copy">Copy Code</div>
+			</div>
 		</div>
+
+		<div id="success"><p>Successfully copied code to clipboard!</p></div>
 
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script>
 			var col = [];
+			var $grad
 
-			for (i = 0; i < 7; i++) {
-				col[i] = Math.floor(Math.random() * 256);
-			}
+			setGrad();
 
-			var $grad = $('body').css('background', 'linear-gradient(rgb(' + col[1] + ',' + col[2] + ',' + col[3] + '), rgb(' + col[4] + ',' + col[5] + ',' + col[6] + '))');
+			function setGrad() {
+				for (i = 0; i < 7; i++) {
+					col[i] = Math.floor(Math.random() * 256);
+				}
+				$('body').css('background', 'linear-gradient(rgb(' + col[1] + ',' + col[2] + ',' + col[3] + '), rgb(' + col[4] + ',' + col[5] + ',' + col[6] + '))');
+				$grad = $('body').css('background').replace('rgba(0, 0, 0, 0)', 'background:' ).replace(' repeat scroll 0% 0% / auto padding-box border-box', ';');
+				$('#readout').html($grad);
+			};
 
+			$('#refresh').on('click', function() {
+				setGrad();
+			});
+
+			$('#copy').on('click', function() {
+				$('#readout').select();
+				document.execCommand('copy');
+				if (!$('#success').is(':animated')) {
+					$('#success').fadeIn('slow').delay('1000').fadeOut('slow');
+				}
+			})
 		</script>
 	</body>
 </html>
