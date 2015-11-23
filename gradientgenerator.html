@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
-
 			@font-face {
 				font-family: 'Work Sans';
 				font-style: normal;
@@ -13,8 +13,10 @@
 
 			body {
 				margin: 0px;
+				width: 100vw;
 				height: 100vh;
 				font-family: 'Work Sans', sans-serif;
+				overflow: hidden;
 			}
 
 			#display {
@@ -28,8 +30,14 @@
 				text-align: center;
 			}
 
+			#display h1 {
+				letter-spacing: -2px;
+			}
+
 			textarea {
 				font-size: 125%;
+				width: 650px;
+				height: 20px;
 				resize: none;
 				margin-bottom: 20px;
 			}
@@ -82,13 +90,39 @@
 				margin: auto;
 				padding-top: 7px;
 			}
+
+			@media screen and (max-width: 700px) {
+				#display {
+					max-width: 90%;
+					left: 5%;
+					height: auto;
+					top: calc(50% - 125px);
+					padding-bottom: 5px;
+				}
+
+				#buttons div {
+					margin: 0px;
+				}
+
+				textarea {
+					width: 95%;
+					height: auto;
+				}
+
+				#success {
+					height: 25px;
+					width: 90%;
+					left: 5%;
+					top: 85%;
+				}
+			}
 		</style>
 	</head>
 	<body>
 
 		<div id="display">
 			<h1>Copy the code below to use this gradient:</h1>
-			<textarea id="readout" readonly rows="1" cols="70"></textarea>
+			<textarea id="readout" readonly></textarea>
 			<div id="buttons">
 				<div id="refresh">Reroll</div>
 				<div id="copy">Copy Code</div>
