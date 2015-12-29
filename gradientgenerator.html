@@ -19,6 +19,10 @@
 				overflow: hidden;
 			}
 
+			#input {
+				display: none;
+			}
+
 			#display {
 				position: absolute;
 				width: 700px;
@@ -42,6 +46,12 @@
 				margin-bottom: 20px;
 			}
 
+			input {
+				width: 40px;
+				height: 20px;
+				margin-bottom: 25px;
+			}
+
 			#buttons div {
 				height: 50px;
 				width: 100px;
@@ -57,6 +67,7 @@
 
 			#refresh {
 				background-image: url('refresh.png');
+				background-size: auto 27px;
 				background-repeat: no-repeat;
 				background-position: bottom;
 			}
@@ -66,6 +77,18 @@
 				background-size: auto 27px;
 				background-repeat: no-repeat;
 				background-position: bottom;
+			}
+
+			.mode {
+				background-image: url('mode.png');
+				background-size: auto 27px;
+				background-repeat: no-repeat;
+				background-position: bottom;
+			}
+
+			#ddash {
+				display: inline-block;
+				margin: 0px;
 			}
 
 			#buttons div:hover {
@@ -121,11 +144,29 @@
 	<body>
 
 		<div id="display">
-			<h1>Copy the code below to use this gradient:</h1>
-			<textarea id="readout" readonly></textarea>
-			<div id="buttons">
-				<div id="refresh">Reroll</div>
-				<div id="copy">Copy Code</div>
+			<div id="output">
+				<h1>Copy the code below to use this gradient:</h1>
+				<textarea id="readout" readonly></textarea>
+				<div id="buttons">
+					<div id="refresh">Reroll</div>
+					<div class="mode">Mode</div>
+					<div id="copy">Copy Code</div>
+				</div>
+			</div>
+			<div id="input">
+				<h1>Input numbers between 0-255 below:</h1>
+				<form id="rgbinput">
+					<input type="number" name="r1" min="0" max="255"></input>
+					<input type="number" name="g1" min="0" max="255"></input>
+					<input type="number" name="b1" min="0" max="255"></input>
+					<p id="ddash">--</p>
+					<input type="number" name="r2" min="0" max="255"></input>
+					<input type="number" name="g2" min="0" max="255"></input>
+					<input type="number" name="b2" min="0" max="255"></input>
+				</form>
+				<div id="buttons">
+					<div class="mode">Mode</div>
+				</div>
 			</div>
 		</div>
 
@@ -156,6 +197,22 @@
 				document.execCommand('copy');
 				if (!$('#success').is(':animated')) {
 					$('#success').fadeIn('slow').delay('1000').fadeOut('slow');
+				}
+			})
+
+			$('.mode').on('click', function() {
+				$('#output').toggle();
+				$('#input').toggle();
+			})
+
+
+				var x
+			
+			$('input').on('blur', function() {
+				x = $('this').val();
+				if (x < 0 || x > 255){
+					console.log('hello');
+					$('this').css('border-colour', '#FF0000');
 				}
 			})
 		</script>
