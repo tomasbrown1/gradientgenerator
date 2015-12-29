@@ -204,12 +204,9 @@
 				$('#output').toggle();
 				$('#input').toggle();
 			})
-
-
-				var x
 			
 			$('input').on('blur', function() {
-				x = $('this').val();
+				var x = $('this').val();
 				if (x < 0 || x > 255){
 					console.log('hello');
 					$('this').css('border-colour', '#FF0000');
