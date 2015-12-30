@@ -72,7 +72,7 @@
 				background-position: bottom;
 			}
 
-			#copy {
+			.copy {
 				background-image: url('copy.png');
 				background-size: auto 27px;
 				background-repeat: no-repeat;
@@ -150,22 +150,23 @@
 				<div id="buttons">
 					<div id="refresh">Reroll</div>
 					<div class="mode">Mode</div>
-					<div id="copy">Copy Code</div>
+					<div class="copy">Copy Code</div>
 				</div>
 			</div>
 			<div id="input">
 				<h1>Input numbers between 0-255 below:</h1>
 				<form id="rgbinput">
-					<input type="number" name="r1" min="0" max="255"></input>
-					<input type="number" name="g1" min="0" max="255"></input>
-					<input type="number" name="b1" min="0" max="255"></input>
+					r:<input type="number" name="r1" min="0" max="255"></input>
+					g:<input type="number" name="g1" min="0" max="255"></input>
+					b:<input type="number" name="b1" min="0" max="255"></input>
 					<p id="ddash">--</p>
-					<input type="number" name="r2" min="0" max="255"></input>
-					<input type="number" name="g2" min="0" max="255"></input>
-					<input type="number" name="b2" min="0" max="255"></input>
+					r:<input type="number" name="r2" min="0" max="255"></input>
+					g:<input type="number" name="g2" min="0" max="255"></input>
+					b:<input type="number" name="b2" min="0" max="255"></input>
 				</form>
 				<div id="buttons">
 					<div class="mode">Mode</div>
+					<div class="copy">Copy Code</div>
 				</div>
 			</div>
 		</div>
@@ -192,7 +193,7 @@
 				setGrad();
 			});
 
-			$('#copy').on('click', function() {
+			$('.copy').on('click', function() {
 				$('#readout').select();
 				document.execCommand('copy');
 				if (!$('#success').is(':animated')) {
@@ -204,14 +205,83 @@
 				$('#output').toggle();
 				$('#input').toggle();
 			})
-			
-			$('input').on('blur', function() {
-				var x = $('this').val();
-				if (x < 0 || x > 255){
-					console.log('hello');
-					$('this').css('border-colour', '#FF0000');
+
+			$('input:last').on('keydown', function(e) {
+				var keyCode = e.keyCode
+				if (keyCode == 9) {
+					e.preventDefault();
+					$(this).parent().children().first().focus().select();
 				}
 			})
+
+			var x = [];
+			$('#rgbinput').children('input').on('blur', function() {
+				var $num = $(this).val();
+				if ($num < 0 || $num > 255 || $num == "") {
+					$(this).css('background', 'rgba(255, 0, 0, 0.1)')
+				} else {
+					$(this).css('background', '#FFFFFF')
+				}
+				$('input').each(function(i) {
+					x[i] = $(this).val();
+				})
+				setBackground();
+			})
+
+			var r1 = false;
+			var g1 = false;
+			var b1 = false;
+			var r2 = false;
+			var g2 = false;
+			var b2 = false;
+			var rgb1 = false;
+			var rgb2 = false;
+
+			function setBackground() {
+				if (x[0] >= 0 && x[0] <= 255) {
+					r1 = true;
+				} else {
+					r1 = false;
+				}
+				if (x[1] >= 0 && x[1] <= 255) {
+					g1 = true;
+				} else {
+					g1 = false;
+				}
+				if (x[2] >= 0 && x[2] <= 255) {
+					b1 = true;
+				} else {
+					b1 = false;
+				}
+				if (x[3] >= 0 && x[3] <= 255) {
+					r2 = true;
+				} else {
+					r2 = false;
+				}
+				if (x[4] >= 0 && x[4] <= 255) {
+					g2 = true;
+				} else {
+					g2 = false;
+				}
+				if (x[5] >= 0 && x[5] <= 255) {
+					b2 = true;
+				} else {
+					b2 = false;
+				}
+				if (r1 && g1 && b1 == true) {
+					rgb1 = true;
+				} else {
+					rgb1 = false;
+				}
+				if (r2 && g2 && b2 == true) {
+					rgb2 = true;
+				} else {
+					rgb2 = false;
+				}
+				if (rgb1 && rgb2 == true) {
+					$('body').css('background', 'linear-gradient(rgb(' + x[0] + ',' + x[1] + ',' + x[2] + '), rgb(' + x[3] + ',' + x[4] + ',' + x[5] + '))');
+				}
+			};
 		</script>
 	</body>
 </html>
