@@ -96,7 +96,7 @@
 				background-color: #08F905;
 			}
 
-			#success {
+			#success, #failure {
 				display: none;
 				top: 75vh;
 				left: calc(50% - 150px);
@@ -109,7 +109,7 @@
 				border-radius: 10px;
 			}
 
-			#success p {
+			#success p, #failure p {
 				margin: auto;
 				padding-top: 7px;
 			}
@@ -149,8 +149,8 @@
 				<textarea id="readout" readonly></textarea>
 				<div id="buttons">
 					<div id="refresh">Reroll</div>
-					<div class="mode">Mode</div>
 					<div class="copy">Copy Code</div>
+					<div class="mode">Mode</div>
 				</div>
 			</div>
 			<div id="input">
@@ -165,13 +165,14 @@
 					b:<input type="number" name="b2" min="0" max="255"></input>
 				</form>
 				<div id="buttons">
-					<div class="mode">Mode</div>
 					<div class="copy">Copy Code</div>
+					<div class="mode">Mode</div>
 				</div>
 			</div>
 		</div>
 
 		<div id="success"><p>Successfully copied code to clipboard!</p></div>
+		<div id="failure"><p>Make sure all values are between 0-255</p></div>
 
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script>
@@ -193,13 +194,24 @@
 				setGrad();
 			});
 
-			$('.copy').on('click', function() {
-				$('#readout').select();
-				document.execCommand('copy');
+			function success() {
 				if (!$('#success').is(':animated')) {
 					$('#success').fadeIn('slow').delay('1000').fadeOut('slow');
 				}
+			};
+
+			function failure() {
+				if (!$('#failure').is(':animated')) {
+					$('#failure').fadeIn('slow').delay('1000').fadeOut('slow');
+				}
+			}
+
+			$('#output .copy').on('click', function() {
+				$('#readout').select();
+				document.execCommand('copy');
+				success();
 			})
+
 
 			$('.mode').on('click', function() {
 				$('#output').toggle();
@@ -236,6 +248,7 @@
 			var b2 = false;
 			var rgb1 = false;
 			var rgb2 = false;
+			var inputCode
 
 			function setBackground() {
 				if (x[0] >= 0 && x[0] <= 255) {
@@ -279,9 +292,23 @@
 					rgb2 = false;
 				}
 				if (rgb1 && rgb2 == true) {
-					$('body').css('background', 'linear-gradient(rgb(' + x[0] + ',' + x[1] + ',' + x[2] + '), rgb(' + x[3] + ',' + x[4] + ',' + x[5] + '))');
+					inputCode = 'linear-gradient(rgb(' + x[0] + ',' + x[1] + ',' + x[2] + '), rgb(' + x[3] + ',' + x[4] + ',' + x[5] + '))';
+					$('body').css('background', inputCode);
 				}
 			};
+
+			$('#input .copy').on('click', function() {
+				if (rgb1 && rgb2 == true) {
+					var $temp = $('<input>');
+					$('body').append($temp);
+					$temp.val('background: ' + inputCode + ';').select();
+					document.execCommand('copy');
+					$temp.remove();
+					success();
+				} else {
+					failure();
+				}
+			})
 		</script>
 	</body>
 </html>
